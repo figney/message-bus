@@ -16,9 +16,6 @@
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 
-        <RestoreAdditionalProjectSources>
-            http://nexus.douyinwanghong.com.cn/repository/nuget-skywalkers/index.json;
-        </RestoreAdditionalProjectSources>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <RootNamespace />
