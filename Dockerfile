@@ -1,11 +1,19 @@
-FROM  node:14.16.1-buster
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-WORKDIR /scripts
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 80
 
-COPY src .
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY app .
 
-RUN npm install
+RUN dotnet build Advertiser.sln -c Release -o /app/build
 
-EXPOSE 7001
+FROM build AS publish
+RUN dotnet publish "Advertiser.sln" -c Release -o /app/publish
 
-CMD ["npm", "run", "debug"]
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Advertiser.WebApi.Hosting.dll"]
