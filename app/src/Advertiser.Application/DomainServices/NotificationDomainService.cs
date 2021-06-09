@@ -27,7 +27,7 @@ namespace Advertiser.Application.DomainServices
             var mongoClient = new MongoClient(_server);
             IMongoDatabase database = mongoClient.GetDatabase(_database);
             var collection = database.GetCollection<Notification>(_collection);
-            await collection.DeleteManyAsync(filter => filter.CreationTime < DateTime.Now.AddDays(-5));
+            await collection.DeleteManyAsync(filter => filter.IsRead == true && filter.CreationTime < DateTime.Now.AddDays(-5));
         }
 
         public async Task<List<Notification>> GetNotificationsAsync(long userId)

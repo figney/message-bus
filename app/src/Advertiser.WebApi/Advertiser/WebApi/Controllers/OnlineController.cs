@@ -4,7 +4,7 @@ using Advertiser.WebApi.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Advertiser.Controllers
 {
@@ -13,13 +13,11 @@ namespace Advertiser.Controllers
     public class OnlineController : ControllerBase
     {
         private readonly IOnliner _onliner;
-        private readonly ILogger<OnlineController> _logger;
         private readonly IHubContext<MessageHuber, IMessage> _hubContext;
 
-        public OnlineController(IOnliner onliner, ILogger<OnlineController> logger, IHubContext<MessageHuber, IMessage> hubContext)
+        public OnlineController(IOnliner onliner, IHubContext<MessageHuber, IMessage> hubContext)
         {
             _onliner = onliner;
-            _logger = logger;
             _hubContext = hubContext;
         }
 
@@ -32,7 +30,7 @@ namespace Advertiser.Controllers
 
         [HttpGet]
         [Route("users")]
-        public Dictionary<long, string> GetOnlineUsersAsync()
+        public ConcurrentDictionary<long, string> GetOnlineUsersAsync()
         {
             return _onliner.Users;
         }

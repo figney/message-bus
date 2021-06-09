@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Advertiser.Application.Onlines
@@ -7,10 +7,10 @@ namespace Advertiser.Application.Onlines
     {
         int Count { get; }
 
-        Dictionary<long, string> Users { get; }
+        ConcurrentDictionary<long, string> Users { get; }
 
-        Task OnConnectedAsync(string id, long userId);
+        Task OnConnectedAsync(string connectionId, long userId);
 
-        Task OnDisconnectedAsync(string id);
+        Task OnDisconnectedAsync(string connectionId);
     }
 }

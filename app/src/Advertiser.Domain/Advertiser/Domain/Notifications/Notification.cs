@@ -7,13 +7,13 @@ namespace Advertiser.Domain.Notifications
     public class Notification
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [BsonElement("user_id")]
         public int UserId { get; set; }
 
         [BsonElement("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [BsonElement("socket")]
         public bool Socket { get; set; }
@@ -22,16 +22,16 @@ namespace Advertiser.Domain.Notifications
         public bool Forced { get; set; }
 
         [BsonElement("title_slug")]
-        public string TitleSlug { get; set; }
+        public string? TitleSlug { get; set; }
 
         [BsonElement("content_slug")]
-        public string ContentSlug { get; set; }
+        public string? ContentSlug { get; set; }
 
         [BsonElement("params")]
-        public object Params { get; set; }
+        public object? Params { get; set; }
 
         [BsonElement("data")]
-        public object Data { get; set; }
+        public object? Data { get; set; }
 
         [BsonElement("read_time")]
         public DateTime ReadTime { get; set; }

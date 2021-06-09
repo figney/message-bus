@@ -1,11 +1,8 @@
-﻿using Advertiser.Application.DomainServices;
-using Advertiser.Application.Messages;
+﻿using Advertiser.Application.Messages;
 using Advertiser.Application.Onlines;
-using Advertiser.Domain.Notifications;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Advertiser.WebApi.Hubs

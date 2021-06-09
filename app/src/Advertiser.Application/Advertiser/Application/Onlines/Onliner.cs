@@ -1,14 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Advertiser.Application.Onlines
 {
     public class Onliner : IOnliner
     {
         private readonly ILogger<Onliner> _logger;
-
-        private Dictionary<long, string> _users = new();
+        private readonly ConcurrentDictionary<long, string> _users = new();
 
         public Onliner(ILogger<Onliner> logger)
         {
@@ -17,19 +20,26 @@ namespace Advertiser.Application.Onlines
 
         public int Count => _users.Count;
 
-        public Dictionary<long, string> Users => _users;
+        public ConcurrentDictionary<long, string> Users => _users;
 
-        public Task OnConnectedAsync(string id, long userId)
+        public Task OnConnectedAsync(string connectionId, long userId)
         {
-            _users.TryAdd(userId, id);
-            _logger.LogInformation("OnConnected: {id} <===> {userId}", id, userId);
+            _logger.LogInformation("{userId} Connected: {connectionId}", connectionId, userId);
+            string value = _users.AddOrUpdate(userId, connectionId, (userId, connectionId) =>
+            {
+                _logger.LogInformation("{userId} Updated: {connectionId}", userId, connectionId);
+                return connectionId;
+            });
             return Task.CompletedTask;
         }
 
         public Task OnDisconnectedAsync(string id)
         {
-            _users.Remove(1);
-            _logger.LogInformation("OnDisconnected: {id}", id);
+            var pair = _users.Where(predicate => predicate.Value == id).FirstOrDefault();
+            if (_users.TryRemove(pair))
+            {
+                _logger.LogInformation("{0} Disconnected: {1}", pair.Key, pair.Value);
+            }
             return Task.CompletedTask;
         }
     }
